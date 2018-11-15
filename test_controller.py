@@ -29,8 +29,8 @@ class Controller:
         self.enemies = pygame.sprite.Group()
         num_enemies = 3
         for i in range(num_enemies):
-            x = random.randrange(100, 400)
-            y = random.randrange(100, 400)
+            x = random.randrange(100, 200)
+            y = random.randrange(100, 200)
             self.enemies.add(enemy.Enemy("kitty", x, y, 'cat.png' ))
         self.player = player.Player("dogg", 50, 80, "dog.png")
         self.all_sprites = pygame.sprite.Group((self.player,)+tuple(self.enemies))
@@ -45,19 +45,24 @@ class Controller:
 
     def gameLoop(self):
         """This is the Main Loop of the Game"""
-        pygame.key.set_repeat(1,50)
+        #pygame.key.set_repeat(1,50)
         while self.state == "GAME":
-            self.background.fill((250, 250, 250))
+            pygame.time.delay(25)
+            self.background.fill((226, 61, 226))
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     sys.exit()
-                if event.type == pygame.KEYDOWN:
-                    if(event.key == pygame.K_SPACE):
-                        self.player.jump()
-                    elif(event.key == pygame.K_LEFT):
-                        self.player.moveLeft()
-                    elif(event.key == pygame.K_RIGHT):
-                        self.player.moveRight()
+
+            keys = pygame.key.get_pressed()
+            if(keys[pygame.K_LEFT]) and self.player.rect.x > self.player.speed:
+                self.player.moveLeft()
+            if(keys[pygame.K_RIGHT]) and self.player.rect.x < 640 - 257 - self.player.speed:
+                self.player.moveRight()
+            if not(self.player.isJump):
+                if(keys[pygame.K_SPACE]):
+                    self.player.isJump = True
+            else:
+                self.player.jump()
             #check for collisions
             fights = pygame.sprite.spritecollide(self.player, self.enemies, True)
             #redraw the entire screen

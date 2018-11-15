@@ -9,30 +9,26 @@ class Player(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
-        self.isjump = 0
-        self.v = 8
-        self.m = 2
         self.speed = 2
 
+        self.isJump = False
+        self.jumpCount = 10
     def moveLeft(self):
         self.rect.x -= self.speed
     def moveRight(self):
         self.rect.x += self.speed
     def jump(self):
-        self.isjump = 1
-        
-    def update(self):
-        #still experimenting with this... goal is to get physics with the jump
-        if self.v > 0:
-            F = (0.5 * self.m * (self.v*self.v))
+        if self.jumpCount >= -10:
+            neg = 1
+            if self.jumpCount < 0:
+                neg = -1  
+            self.rect.y -= (self.jumpCount ** 2) * 0.5 * neg
+            self.jumpCount -= 1
         else:
-            F = -(0.5 * self.m * (self.v*self.v))
+            self.isJump = False
+            self.jumpCount = 10
+    def update(self):
+        if self.rect.y > 80:
+            self.rect.y = 80
+        pass
 
-        self.y -= F
-        self.v -= 1
-
-        if self.y >= 500:
-            self.y = 500
-            self.isjump = 0
-            self.v = 8
-    

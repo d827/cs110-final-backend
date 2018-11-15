@@ -1,4 +1,4 @@
-from character import Player
+import player
 import pygame
 
 class Powerup(pygame.sprite.Sprite):
@@ -11,9 +11,9 @@ class Powerup(pygame.sprite.Sprite):
         self.rect.y = y
 
     def speedUp(self):
-        character.speed += 2
+        player.speed += 2
         #thisll raise the speed up of the player by 2
     def lowGrav(self):
-        character.m = 1
+        player.m = 1
         #the idea is to lower the mass so you jump higher
         
